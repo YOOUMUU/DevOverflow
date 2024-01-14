@@ -43,7 +43,6 @@ export default function RootLayout({
             },
           }}
         >
-          <h1 className="h1-bold">This is a piece of text</h1>
           <ThemeProvider>{children}</ThemeProvider>
         </ClerkProvider>
       </body>
