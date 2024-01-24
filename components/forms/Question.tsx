@@ -21,6 +21,7 @@ import { Input } from '@/components/ui/input';
 import { QuestionSchema } from '@/lib/vaildation';
 import { Badge } from '../ui/badge';
 import Image from 'next/image';
+import { createQuestion } from '@/lib/actions/question.action';
 
 const type: string = 'create';
 
@@ -37,12 +38,15 @@ const Question = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof QuestionSchema>) {
+  async function onSubmit(values: z.infer<typeof QuestionSchema>) {
     setIsSubmitting(true);
 
     try {
       // make an async call to your API -> create a question
       // contain all form data
+
+      await createQuestion({});
+
       // navigate to home page
     } catch (error) {
     } finally {
@@ -90,7 +94,7 @@ const Question = () => {
       >
         <FormField
           control={form.control}
-          name="explanation"
+          name="title"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col">
               <FormLabel className="paragraph-semibold text-dark400_light800">
@@ -115,7 +119,7 @@ const Question = () => {
 
         <FormField
           control={form.control}
-          name="title"
+          name="explanation"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col gap-3">
               <FormLabel className="paragraph-semibold text-dark400_light800">
@@ -124,11 +128,13 @@ const Question = () => {
               </FormLabel>
               <FormControl className="mt-3.5">
                 <Editor
-                  apiKey={process.env.NEXT_PUBILC_TINY_EDITOR_API_KEY}
+                  apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
                   onInit={(evt, editor) =>
                     // @ts-ignore
                     (editorRef.current = editor)
                   }
+                  onBlur={field.onBlur}
+                  onEditorChange={(content) => field.onChange(content)}
                   initialValue=""
                   init={{
                     height: 500,
@@ -215,6 +221,7 @@ const Question = () => {
         <Button
           type="submit"
           className="primary-gradient w-fit !text-light-900"
+          disabled={isSubmitting}
         >
           {isSubmitting ? (
             <>{type === 'edit' ? 'Editing...' : 'Posting...'}</>
