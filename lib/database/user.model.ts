@@ -10,8 +10,8 @@ export interface IUser extends Document {
   picture: string;
   location: string;
   portfolioWebsite?: string;
-  reputaion?: number;
-  saved: Schema.Types.ObjectId;
+  reputation?: number;
+  saved: Schema.Types.ObjectId[];
   joinAt: Date;
 }
 
